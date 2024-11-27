@@ -1,6 +1,8 @@
 <template>
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
-  <Home />
+  <v-app class="test">
+    <Home />
+  </v-app>
+
 </template>
 
 
@@ -10,5 +12,7 @@ import Home from './pages/Home.vue'
 
 
 <style scoped>
-
+.test{
+  background-color: bisque;
+}
 </style>
