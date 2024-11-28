@@ -6,7 +6,7 @@
             <v-card-title>
               {{ zone.name }}区
             </v-card-title>
-            <v-card-subtitle class="parking-info">
+            <v-card-subtitle>
               <div :class="{ 'text-success': zone.free > 0, 'text-error': zone.free === 0 }">
                 <span>{{ zone.free }} / {{ zone.total }}</span>
               </div>
@@ -21,24 +21,14 @@
 </template>
   
 <script setup lang="ts">
-import { ref } from "vue"
+import { useParkingStore } from "../../stores/parkingStore";
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-  // 初始化停车区域数据
-const zones = ref(
-    Array.from({ length: 17 }, (_, i) => ({
-        name: String.fromCharCode(65 + i), // A-Q
-        total: 18, // 每个区域分配 18 个车位
-        free: 18, // 初始状态全部空闲
-        slots: Array.from({ length: 18 }, () => ({
-            isOccupied: false,
-            licensePlate: "",
-        })),
-    }))
-)
-  
+const parkingStore = useParkingStore();
+const zones = parkingStore.zones; 
+
 const navigateToZone = (zoneName) => { 
     router.push(`/zone/${zoneName}`)
 }
@@ -51,10 +41,6 @@ const navigateToZone = (zoneName) => {
 
 .parking-zone {
   text-align: center;
-}
-
-.parking-info{
-  
 }
 
 .parking-slot {
