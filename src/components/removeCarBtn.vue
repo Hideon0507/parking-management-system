@@ -1,31 +1,20 @@
 <template>
-  <v-btn
-    color="blue"
-    variant="tonal"
-    @click="handleClick"
-  >
-    出库
-  </v-btn>
+  <v-btn color="blue" class="" @click="handleClick"> 出 库 </v-btn>
 </template>
 
 <script setup lang="ts">
 import { useParkingStore } from "../stores/parkingStore";
 
-const props = defineProps({
-  zoneName: {
-    type: String,
-    default: null, 
-  },
-  slotIndex: {
-    type: Number,
-    default: null, 
-  },
-});
+interface IProps {
+  zoneName?: string;
+  spotIndex?: number;
+}
+const props = defineProps<IProps>();
 
 const parkingStore = useParkingStore();
 const handleClick = () => {
-  if (props.zoneName && props.slotIndex !== null) {
-    parkingStore.removeCar(props.zoneName, props.slotIndex);
+  if (props.zoneName && props.spotIndex !== null) {
+    parkingStore.removeCar(props.zoneName, props.spotIndex);
   } else {
     parkingStore.removeCar();
   }

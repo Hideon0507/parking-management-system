@@ -7,11 +7,11 @@
               {{ zone.name }}区
             </v-card-title>
             <v-card-subtitle>
-              <div :class="{ 'text-success': zone.free > 0, 'text-error': zone.free === 0 }">
+              <div :class="{ 'text-green': zone.free > 0, 'text-red': zone.free === 0 }">
                 <span>{{ zone.free }} / {{ zone.total }}</span>
               </div>
-              <span>
-                空闲车位/全部车位
+              <span class="text-subtitle-2">
+                空闲车位 / 全部车位
               </span>
             </v-card-subtitle>
           </v-card>
@@ -41,25 +41,5 @@ const navigateToZone = (zoneName) => {
 
 .parking-zone {
   text-align: center;
-}
-
-.parking-slot {
-  margin-bottom: 8px;
-}
-
-.free-slot {
-  background-color: #e0f7fa;
-}
-
-.occupied-slot {
-  background-color: #ffcdd2;
-}
-
-.text-success {
-  color: #4caf50;
-}
-
-.text-error {
-  color: #f44336;
 }
 </style>

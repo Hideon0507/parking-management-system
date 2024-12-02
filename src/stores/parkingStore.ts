@@ -1,58 +1,61 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 
-interface Car {
+export interface Car {
   licensePlate: string;
   timeIn?: Date;
   timeOut?: Date;
 }
 
-interface Slot {
+export interface Spot {
+  spotNumber: string;
   isOccupied: boolean;
   carInfo?: Car;
 }
 
-interface Zone {
+export interface Zone {
   name: string;
   total: number;
   free: number;
-  slots: Slot[];
+  spots: Spot[];
 }
 
 export const useParkingStore = defineStore("parkingStore", () => {
   const zones = reactive(
-    Array.from(
-      { length: 17 },
-      (_, i): Zone => ({
-        name: String.fromCharCode(65 + i),
-        total: 18,
-        free: 18,
-        slots: Array.from(
-          { length: 18 },
-          (): Slot => ({
+    Array.from({ length: 13 }, (_, zoneIndex): Zone => {
+      const isLastZone = zoneIndex === 12;
+      const zoneName = String.fromCharCode(65 + zoneIndex); 
+      return {
+        name: zoneName, 
+        total: isLastZone ? 12 : 24,
+        free: isLastZone ? 12 : 24,
+        spots: Array.from(
+          { length: isLastZone ? 12 : 24 },
+          (_, spotIndex): Spot => ({
+            spotNumber: `${zoneName}-${(spotIndex + 1).toString().padStart(2, '0')}`,
             isOccupied: false,
           })
         ),
-      })
-    )
+      };
+    })
   );
 
-  const addCar = (car: Car, zoneName?: string, slotIndex?: number) => {
-    if (zoneName !== undefined && slotIndex !== undefined) {
+  const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
+    if (zoneName !== undefined && spotIndex !== undefined) {
       const zone = zones.find((z) => z.name === zoneName);
       if (!zone) return;
-      const slot = zone.slots[slotIndex];
-      if (!slot.isOccupied) {
+      const spot = zone.spots[spotIndex];
+      if (!spot.isOccupied) {
         car.timeIn = new Date();
-        slot.isOccupied = true;
-        slot.carInfo = car;
+        spot.isOccupied = true;
+        spot.carInfo = car;
         zone.free -= 1;
       }
     } else {
       for (const zone of zones) {
-        const slotIndex = zone.slots.findIndex((slot) => !slot.isOccupied);
-        if (slotIndex !== -1) {
-          addCar(car, zone.name, slotIndex);
+        const spotIndex = zone.spots.findIndex((spot) => !spot.isOccupied);
+        if (spotIndex !== -1) {
+          addCar(car, zone.name, spotIndex);
           return;
         }
       }
@@ -60,28 +63,28 @@ export const useParkingStore = defineStore("parkingStore", () => {
     }
   };
 
-  const removeCar = (zoneName?: string, slotIndex?: number) => {
-    if (zoneName !== undefined && slotIndex !== undefined) {
+  const removeCar = (zoneName?: string, spotIndex?: number) => {
+    if (zoneName !== undefined && spotIndex !== undefined) {
       const zone = zones.find((z) => z.name === zoneName);
       if (!zone) return;
-      const slot = zone.slots[slotIndex];
-      if (!slot || !slot.isOccupied) return;
+      const spot = zone.spots[spotIndex];
+      if (!spot || !spot.isOccupied) return;
 
-      const carInfo = slot.carInfo;
+      const carInfo = spot.carInfo;
       if (carInfo) {
         carInfo.timeOut = new Date();
         console.log(
           `车牌号: ${carInfo.licensePlate}, 入库时间: ${carInfo.timeIn}, 出库时间: ${carInfo.timeOut}`
         );
       }
-      slot.isOccupied = false;
-      slot.carInfo = undefined;
+      spot.isOccupied = false;
+      spot.carInfo = undefined;
       zone.free += 1;
     } else {
       for (const zone of zones) {
-        const slotIndex = zone.slots.findIndex((slot) => slot.isOccupied);
-        if (slotIndex !== -1) {
-          removeCar(zone.name, slotIndex);
+        const spotIndex = zone.spots.findIndex((spot) => spot.isOccupied);
+        if (spotIndex !== -1) {
+          removeCar(zone.name, spotIndex);
           return;
         }
       }

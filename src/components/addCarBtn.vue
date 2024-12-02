@@ -1,20 +1,16 @@
 <template>
-  <v-btn @click="handleClick" > 入库 </v-btn>
+  <v-btn color="green" @click="handleClick"> 入 库 </v-btn>
 </template>
 
 <script setup lang="ts">
 import { useParkingStore } from "../stores/parkingStore";
 
-const props = defineProps({
-  zoneName: {
-    type: String,
-    default: null,
-  },
-  slotIndex: {
-    type: Number,
-    default: null,
-  },
-});
+interface IProps {
+  zoneName?: string;
+  spotIndex?: number;
+}
+
+const props = defineProps<IProps>();
 
 const parkingStore = useParkingStore();
 
@@ -23,8 +19,8 @@ const handleClick = () => {
     licensePlate: `${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
   };
 
-  if (props.zoneName && props.slotIndex !== null) {
-    parkingStore.addCar(car, props.zoneName, props.slotIndex);
+  if (props.zoneName && props.spotIndex !== null) {
+    parkingStore.addCar(car, props.zoneName, props.spotIndex);
   } else {
     parkingStore.addCar(car);
   }
