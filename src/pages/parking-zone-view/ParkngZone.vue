@@ -5,7 +5,7 @@
         <v-btn @click="goBack" color="primary">返回</v-btn>
       </v-col>
       <v-col class="text-center">
-        <h2>{{ zoneName }}区停车位</h2>
+        <h3>{{ zoneName }}区停车位</h3>
       </v-col>
       <v-col
         cols="auto"
@@ -18,7 +18,7 @@
     <v-row class="ml-16">
       <v-col cols="2" v-for="(spot, index) in spots" :key="index">
         <ParkingSpot :spot="spot" :zoneName="zoneName" :spotIndex="index" />
-        <span class="text-greyDark text-subtitle-2 text-center">
+        <span class="text-greyDark text-subtitle-2">
           {{ spot.spotNumber }}
         </span>
       </v-col>

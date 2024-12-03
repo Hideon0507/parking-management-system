@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { onMounted, onUnmounted, reactive, ref } from "vue";
 
 export interface Car {
   licensePlate: string;
   timeIn: Date;
   timeOut?: Date;
+  duration: string;
 }
 
 export interface Spot {
@@ -23,7 +24,7 @@ export interface Zone {
 export interface ParkingHistory {
   car: Car;
   spotNumber: string;
-  duration?: string;
+  // duration: string;
 }
 
 export const useParkingStore = defineStore("parkingStore", () => {
@@ -50,11 +51,36 @@ export const useParkingStore = defineStore("parkingStore", () => {
 
   const parkingHistory = ref<Array<ParkingHistory>>([]);
 
+  const updateDurations = () => {
+    const now = new Date();
+    parkingHistory.value.forEach((entry) => {
+      if (!entry.car.timeOut) {
+        const durationMs = now.getTime() - entry.car.timeIn.getTime();
+        entry.car.duration = formatDuration(durationMs);
+      }
+    });
+  };
+
+  let durationInterval: number | undefined;
+
+  onMounted(() => {
+    updateDurations(); // 立即更新
+    durationInterval = setInterval(updateDurations, 60000); // 每分钟更新
+  });
+
+  onUnmounted(() => {
+    if (durationInterval) {
+      clearInterval(durationInterval);
+    }
+  });
+
   const addEntry = (car: Car, spotNumber: string,) => {
     parkingHistory.value.unshift({
       car: car,
       spotNumber,
+      // duration: ''
     });
+    updateDurations();
   };
 
   const updateExit = (licensePlate: string, timeOut: Date) => {
@@ -63,8 +89,8 @@ export const useParkingStore = defineStore("parkingStore", () => {
     );
     if (log) {
       log.car.timeOut = timeOut;
-      const duration = timeOut.getTime() - log.car.timeIn.getTime();
-      log.duration = formatDuration(duration);
+      // const duration = timeOut.getTime() - log.car.timeIn.getTime();
+      // log.duration = formatDuration(duration);
     }
   };
 
@@ -74,6 +100,10 @@ export const useParkingStore = defineStore("parkingStore", () => {
     return hours > 0 ? `${hours} 小时 ${minutes} 分钟` : `${minutes} 分钟`;
   };
 
+  const formatTime = (time: Date) => {
+    return new Date(time).toLocaleString();
+  };
+
 
   const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
     if (zoneName !== undefined && spotIndex !== undefined) {
@@ -81,7 +111,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
       if (!zone) return;
       const spot = zone.spots[spotIndex];
       if (!spot.isOccupied) {
-        car.timeIn = new Date();
         spot.isOccupied = true;
         spot.carInfo = car;
         zone.free -= 1;
@@ -115,9 +144,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
         zone.free += 1;
         
         updateExit(carInfo.licensePlate, timeOut);
-        console.log(
-          `车牌号: ${carInfo.licensePlate}, 入库时间: ${carInfo.timeIn}, 出库时间: ${carInfo.timeOut}`
-        );
       }
    
     } else {
@@ -135,6 +161,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
   return {
     zones,
     parkingHistory,
+    formatTime,
     addCar,
     removeCar,
   };

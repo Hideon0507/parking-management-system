@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" class="header-container pa-5">
-    <v-col cols="3" class="pl-16">
+    <v-col cols="2" class="pl-10 mr-10">
       <v-text-field
         v-model="searchQuery"
         label="请输入车牌号查询"
@@ -13,17 +13,18 @@
       </v-text-field>
     </v-col>
 
-    <v-col>
-      <h1 class="header-title">停车场管理系统</h1>
+    <v-col align="center">
+      <h2 >停车场管理系统</h2>
     </v-col>
 
-    <v-col cols="3" class="action d-flex justify-space-evenly">
-      <span>空闲车位/全部车位 :</span>
-      <div>
-        <span class="text-green">{{ freeSpots }} </span> <span>/ {{ totalSpots }}</span>
+    <v-col cols="auto" class="d-flex align-center">
+      <div class="mr-3">
+        <span>空闲车位/全部车位 : </span>
+        <span class="text-green">{{ freeSpots }} </span>
+        <span> / {{ totalSpots }}</span>
       </div>
 
-      <addCarBtn />
+      <addCarBtn class="mr-2"/>
       <removeCarBtn />
     </v-col>
   </v-row>
@@ -49,19 +50,7 @@ const totalSpots = computed(() =>
 
 <style scoped>
 .header-container {
-  --background-color: #f5f5f5;
+    height: 15vh;
   border-bottom: 1px solid #e0e0e0;
-}
-
-.header-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-  text-align: center;
-}
-
-.action {
-  display: flex;
-  align-items: center;
 }
 </style>

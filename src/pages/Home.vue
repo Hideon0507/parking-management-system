@@ -10,7 +10,7 @@
       <v-col cols="9" class="bg-grey-lighten-3">
         <router-view />
       </v-col>
-      <v-col cols="3" class="bg-blue-grey-lighten-2">
+      <v-col cols="3" class="bg-blue-grey-lighten-3">
         <SideBar class="sidebar" />
       </v-col>
     </v-row>
@@ -23,11 +23,18 @@ import SideBar from "./side-bar-view/SideBar.vue";
 </script>
 
 <style scoped>
-.parkgrid {
-  --background-color: aquamarine;
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar {
+  width: 6px; 
 }
 
-.sidebar {
-  height: 100%;
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #F5F5F5; 
+  border-radius: 5px; 
 }
+
+
 </style>
