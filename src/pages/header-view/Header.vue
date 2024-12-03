@@ -49,7 +49,7 @@ const totalSpots = computed(() =>
 
 <style scoped>
 .header-container {
-  background-color: #f5f5f5;
+  --background-color: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
 }
 

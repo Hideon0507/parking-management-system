@@ -1,8 +1,7 @@
 <template>
-  <v-app class="test">
+  <v-app>
     <Home />
   </v-app>
-
 </template>
 
 
@@ -13,6 +12,8 @@ import Home from './pages/Home.vue'
 
 <style scoped>
 .test{
-  background-color: bisque;
+  background-color: rgb(199, 84, 84);
+  height: 100%;
+  width: 100%;
 }
 </style>

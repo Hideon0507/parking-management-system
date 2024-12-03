@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import type { Spot } from "../../../stores/parkingStore";
-import addCarBtn from "../../../components/addCarBtn.vue";
+import addCarBtn from '../../../components/addCarBtn.vue'
 import removeCarBtn from "../../../components/removeCarBtn.vue";
 
 interface IProps {
