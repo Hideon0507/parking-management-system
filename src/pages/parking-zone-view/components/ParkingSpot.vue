@@ -1,76 +1,49 @@
 <template>
-  <v-card class="parking-card" variant="outlined">
-    <v-card-text class="parking-spot">
-      <div v-if="spot.isOccupied">
-        <!-- <v-hover v-slot:default="{ isHovering }">
-          <div class="d-flex cursor-pointer pl-4">
+  <div class="mr-6">
+    <v-card
+      class="parking-card"
+      variant="outlined"
+      color="bg-blue-grey-lighten-3"
+    >
+      <v-card-text class="parking-spot">
+        <div v-if="spot.isOccupied">
+          <div class="d-flex cursor-pointer pl-4" @click="dialogStore.openDialog(log)">
             <span class="text-h6 font-weight-bold">
               {{ spot.carInfo?.licensePlate }}
             </span>
-            <v-icon color="blue-lighten-1" size="18"
+            <v-icon color="blue-grey-lighten-1" size="18"
               >mdi-information-outline</v-icon
             >
           </div>
 
-          <div v-if="isHovering" class="parking-info-card">
-            <p><strong>车牌号:</strong> {{ spot.carInfo?.licensePlate }}</p>
-          </div>
-        </v-hover> -->
-
-        <div class="d-flex cursor-pointer pl-4" @click="showDetails">
-          <span class="text-h6 font-weight-bo ld">
-            {{ spot.carInfo?.licensePlate }}
-          </span>
-          <v-icon color="blue-lighten-1" size="18"
-            >mdi-information-outline</v-icon
-          >
+          <v-icon color="greyDark" size="60">mdi-car</v-icon>
         </div>
-
-        <v-icon color="greyDark" size="60">mdi-car</v-icon>
-      </div>
-      <div v-else>
-        <p class="text-greyDark text-subtitle-1">空闲车位</p>
-      </div>
-    </v-card-text>
-
-    <div class="mb-4">
-      <removeCarBtn
-        v-if="spot.isOccupied"
-        :zoneName="zoneName"
-        :spotIndex="spotIndex"
-      />
-      <addCarBtn v-else :zoneName="zoneName" :spotIndex="spotIndex" />
-    </div>
-  </v-card>
-
-  <v-dialog v-model="detailsDialog" max-width="400">
-    <v-card>
-      <v-card-title>
-        停车详情
-        <v-spacer></v-spacer>
-        <v-btn icon @click="closeDetails">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-card-title>
-      <v-card-text>
-        <p><strong>车牌号:</strong> {{ spot.carInfo!.licensePlate }}</p>
-        <p><strong>车位:</strong> {{ zoneName }} - {{ spotIndex + 1 }}</p>
-        <p>
-          <strong>入库时间:</strong>
-          {{ parkingStore.formatTime(spot.carInfo!.timeIn) }}
-        </p>
-        <p>停车时长: {{ spot.carInfo }}</p>
+        <div v-else>
+          <p class="text-greyDark text-subtitle-1">空闲车位</p>
+        </div>
       </v-card-text>
+
+      <div class="mb-4">
+        <removeCarBtn
+          v-if="spot.isOccupied"
+          :zoneName="zoneName"
+          :spotIndex="spotIndex"
+        />
+        <addCarBtn v-else :zoneName="zoneName" :spotIndex="spotIndex" />
+      </div>
     </v-card>
-  </v-dialog>
+    <p class="text-greyDark text-subtitle-2 test" align="center">
+      {{ spot.spotNumber }}
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { Spot } from "../../../stores/parkingStore";
+import { computed } from "vue";
 import addCarBtn from "../../../components/addCarBtn.vue";
 import removeCarBtn from "../../../components/removeCarBtn.vue";
-import { ref } from "vue";
-import { useParkingStore } from "../../../stores/parkingStore";
+import { useDialogStore } from "../../../stores/dialogStore";
+import type { Spot } from "../../../stores/parkingStore";
 
 interface IProps {
   spot: Spot;
@@ -78,21 +51,16 @@ interface IProps {
   zoneName: string;
 }
 
-defineProps<IProps>();
+const props = defineProps<IProps>();
 
-const parkingStore = useParkingStore();
+const log = computed(() => {
+  return {
+    car: props.spot.carInfo!,
+    spotNumber: props.spot.spotNumber,
+  };
+});
 
-const detailsDialog = ref(false);
-
-// 打开弹窗
-const showDetails = () => {
-  detailsDialog.value = true;
-};
-
-// 关闭弹窗
-const closeDetails = () => {
-  detailsDialog.value = false;
-};
+const dialogStore = useDialogStore(); 
 </script>
 
 <style scoped>
@@ -104,7 +72,7 @@ const closeDetails = () => {
 .parking-card {
   background-color: white;
   height: 18vh;
-  width: 8vw;
+  --width: 8vw;
   display: flex;
   flex-direction: column;
   align-items: center;

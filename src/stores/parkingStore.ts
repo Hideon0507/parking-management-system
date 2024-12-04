@@ -24,7 +24,6 @@ export interface Zone {
 export interface ParkingHistory {
   car: Car;
   spotNumber: string;
-  // duration: string;
 }
 
 export const useParkingStore = defineStore("parkingStore", () => {
@@ -74,11 +73,10 @@ export const useParkingStore = defineStore("parkingStore", () => {
     }
   });
 
-  const addEntry = (car: Car, spotNumber: string,) => {
+  const addEntry = (car: Car, spotNumber: string) => {
     parkingHistory.value.unshift({
       car: car,
       spotNumber,
-      // duration: ''
     });
     updateDurations();
   };
@@ -89,8 +87,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
     );
     if (log) {
       log.car.timeOut = timeOut;
-      // const duration = timeOut.getTime() - log.car.timeIn.getTime();
-      // log.duration = formatDuration(duration);
     }
   };
 
@@ -103,7 +99,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
   const formatTime = (time: Date) => {
     return new Date(time).toLocaleString();
   };
-
 
   const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
     if (zoneName !== undefined && spotIndex !== undefined) {
@@ -142,10 +137,9 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.isOccupied = false;
         spot.carInfo = undefined;
         zone.free += 1;
-        
+
         updateExit(carInfo.licensePlate, timeOut);
       }
-   
     } else {
       for (const zone of zones) {
         const spotIndex = zone.spots.findIndex((spot) => spot.isOccupied);
@@ -158,11 +152,37 @@ export const useParkingStore = defineStore("parkingStore", () => {
     }
   };
 
+  const searchResults = ref<ParkingHistory[]>([]);
+  const searchByLicensePlate = (query: string) => {
+    if (!query) {
+      searchResults.value = [];
+      return;
+    }
+    const results = [];
+    for (const zone of zones) {
+      for (const spot of zone.spots) {
+        if (
+          spot.isOccupied &&
+          spot.carInfo?.licensePlate.includes(query.toUpperCase()) // 模糊匹配
+        ) {
+          results.push({
+            car: spot.carInfo,
+            spotNumber: spot.spotNumber,
+            
+          });
+        }
+      }
+    }
+    searchResults.value = results;
+  };
+
   return {
     zones,
     parkingHistory,
+    searchResults,
     formatTime,
     addCar,
     removeCar,
+    searchByLicensePlate,
   };
 });
