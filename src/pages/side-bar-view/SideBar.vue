@@ -3,14 +3,14 @@
     <h3 class="d-flex justify-center mb-5">车辆出入库历史记录</h3>
 
     <div v-for="(log, index) in paginatedLogs" :key="index">
-      <v-card class="mt-2 pl-5">
-        <v-card-text style="line-height: 1.7" class="text-body-1">
+      <v-card class="mt-2 pl-2">
+        <v-card-text class="text-body-2">
           <ParkingDetails :log="log" :isHistory="true" />
         </v-card-text>
       </v-card>
     </div>
 
-    <div v-if="totalPages > 1" class="pagination">
+    <div v-if="totalPages > 1">
       <v-pagination
         v-model="page"
         :length="totalPages"

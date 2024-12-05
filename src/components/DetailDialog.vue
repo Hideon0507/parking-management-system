@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import ParkingDetails from "../../../components/ParkingDetails.vue";
-import { useDialogStore } from "../../../stores/dialogStore";
+import ParkingDetails from "./ParkingDetails.vue";
+import { useDialogStore } from "../stores/dialogStore";
 
 const dialogStore = useDialogStore();
 </script>

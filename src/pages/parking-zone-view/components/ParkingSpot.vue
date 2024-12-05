@@ -8,18 +8,15 @@
       <v-card-text class="parking-spot">
         <div v-if="spot.isOccupied">
           <div class="d-flex cursor-pointer pl-4" @click="dialogStore.openDialog(log)">
-            <span class="text-h6 font-weight-bold">
+            <span class="text-body-1 text-grey-darken-2 font-weight-bold pb-1">
               {{ spot.carInfo?.licensePlate }}
             </span>
-            <v-icon color="blue-grey-lighten-1" size="18"
-              >mdi-information-outline</v-icon
-            >
+            <v-icon color="blue-grey-lighten-1" size="15">mdi-information-outline</v-icon>
           </div>
-
-          <v-icon color="greyDark" size="60">mdi-car</v-icon>
+          <v-icon color="greyDark" size="35" >mdi-car</v-icon>
         </div>
         <div v-else>
-          <p class="text-greyDark text-subtitle-1">空闲车位</p>
+          <p class="text-greyDark text-subtitle-2">空闲车位</p>
         </div>
       </v-card-text>
 
@@ -32,7 +29,7 @@
         <addCarBtn v-else :zoneName="zoneName" :spotIndex="spotIndex" />
       </div>
     </v-card>
-    <p class="text-greyDark text-subtitle-2 test" align="center">
+    <p class="text-greyDark text-subtitle-2" align="center">
       {{ spot.spotNumber }}
     </p>
   </div>
@@ -66,27 +63,14 @@ const dialogStore = useDialogStore();
 <style scoped>
 .parking-spot {
   min-height: 10vh;
-  display: flex;
-  align-items: center;
 }
 .parking-card {
   background-color: white;
-  height: 18vh;
-  --width: 8vw;
+  height: 130px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-
-.parking-info-card {
-  position: absolute;
-  top: -100%; /* 停车信息卡片显示在车牌号上方 */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: white;
-  border-radius: 8px;
-  padding: 8px;
-  z-index: 10;
 }
 </style>

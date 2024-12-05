@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="teal-lighten-1" @click="handleClick" class="pr-6 pl-6"> 入 库 </v-btn>
+  <v-btn color="teal-lighten-1" class="pr-5 pl-5" size="small" @click="handleClick"> 入 库 </v-btn>
 </template>
 
 <script setup lang="ts">

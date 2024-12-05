@@ -14,12 +14,18 @@
         <SideBar class="sidebar" />
       </v-col>
     </v-row>
+
+    <DetailDialog />
+    <Alert />
   </v-container>
 </template>
 
 <script setup lang="ts">
 import Header from "./header-view/Header.vue";
 import SideBar from "./side-bar-view/SideBar.vue";
+import DetailDialog from "../components/DetailDialog.vue";
+import Alert from "../components/Alert.vue"
+
 </script>
 
 <style scoped>
@@ -28,13 +34,11 @@ import SideBar from "./side-bar-view/SideBar.vue";
   overflow-y: auto;
 }
 .sidebar::-webkit-scrollbar {
-  width: 6px; 
+  width: 6px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #F5F5F5; 
-  border-radius: 5px; 
+  background-color: #f5f5f5;
+  border-radius: 5px;
 }
-
-
 </style>

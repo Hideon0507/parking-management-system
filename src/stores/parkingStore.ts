@@ -100,6 +100,20 @@ export const useParkingStore = defineStore("parkingStore", () => {
     return new Date(time).toLocaleString();
   };
 
+  const alertMessage = ref("");
+  const showAlert = ref(false);
+  const alertType = ref("");
+
+  const showTemporaryAlert = (message: string, type: string) => {
+    alertMessage.value = message;
+    showAlert.value = true;
+    alertType.value = type;
+
+    setTimeout(() => {
+      showAlert.value = false;
+    }, 3000); 
+  };
+
   const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
     if (zoneName !== undefined && spotIndex !== undefined) {
       const zone = zones.find((z) => z.name === zoneName);
@@ -110,16 +124,21 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.carInfo = car;
         zone.free -= 1;
         addEntry(car, spot.spotNumber);
+        showTemporaryAlert(`车辆 ${car.licensePlate} 已入库`, "success")
       }
     } else {
-      for (const zone of zones) {
-        const spotIndex = zone.spots.findIndex((spot) => !spot.isOccupied);
-        if (spotIndex !== -1) {
+      // 随机排序 zones 和 spots 并选取第一个空车位
+      const shuffledZones = [...zones].sort(() => Math.random() - 0.5);
+      for (const zone of shuffledZones) {
+        const shuffledSpots = [...zone.spots].sort(() => Math.random() - 0.5);
+        const spot = shuffledSpots.find((spot) => !spot.isOccupied);
+        if (spot) {
+          const spotIndex = zone.spots.indexOf(spot);
           addCar(car, zone.name, spotIndex);
           return;
         }
       }
-      console.warn("没有空闲车位！");
+      showTemporaryAlert("无空闲车位！", "warning")
     }
   };
 
@@ -137,18 +156,21 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.isOccupied = false;
         spot.carInfo = undefined;
         zone.free += 1;
-
         updateExit(carInfo.licensePlate, timeOut);
+        showTemporaryAlert(`车辆 ${carInfo.licensePlate} 已出库！`, "success")
       }
     } else {
-      for (const zone of zones) {
-        const spotIndex = zone.spots.findIndex((spot) => spot.isOccupied);
-        if (spotIndex !== -1) {
+      const shuffledZones = [...zones].sort(() => Math.random() - 0.5);
+      for (const zone of shuffledZones) {
+        const shuffledSpots = [...zone.spots].sort(() => Math.random() - 0.5);
+        const spot = shuffledSpots.find((spot) => spot.isOccupied);
+        if (spot) {
+          const spotIndex = zone.spots.indexOf(spot);
           removeCar(zone.name, spotIndex);
           return;
         }
       }
-      console.warn("没有车辆可出库！");
+      showTemporaryAlert("没有车辆可出库！", "warning")
     }
   };
 
@@ -168,7 +190,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
           results.push({
             car: spot.carInfo,
             spotNumber: spot.spotNumber,
-            
           });
         }
       }
@@ -180,6 +201,9 @@ export const useParkingStore = defineStore("parkingStore", () => {
     zones,
     parkingHistory,
     searchResults,
+    alertMessage,
+    showAlert,
+    alertType,
     formatTime,
     addCar,
     removeCar,

@@ -2,14 +2,14 @@
   <v-row>
     <v-col>
       <p>
-        <strong class="pr-6">车牌号:  </strong>
-        <span class="font-weight-bold">{{ log.car.licensePlate }}</span>
+        <strong class="pr-5">车牌号:  </strong>
+        <span class="font-weight-bold text-grey-darken-2">{{ log.car.licensePlate }}</span>
       </p>
     </v-col>
     <v-col v-if="isHistory" cols="auto" class="mr-3">
       <div
         v-if="!log.car.timeOut"
-        class="text-orange-lighten-1 text-subtitle-1 d-flex align-center"
+        class="text-orange-lighten-1 text-subtitle-2 d-flex align-center"
       >
         <span>正在停车</span>
         <v-icon class="car-icon pl-2" color="orange-lighten-1"

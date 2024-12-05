@@ -1,5 +1,5 @@
 <template>
-    <v-container class="parking-grid mt-4">
+    <v-container class="parking-grid">
       <v-row class="justify-space-between ml-10 mr-4" >
         <v-col cols="3" v-for="(zone, index) in zones" :key="index">
           <v-card class="parking-zone ma-3 pt-5 pb-5" outlined hover @click="navigateToZone(zone.name)">
