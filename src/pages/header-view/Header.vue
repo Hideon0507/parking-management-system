@@ -5,7 +5,7 @@
     </v-col>
 
     <v-col align="center">
-      <h2>停车场管理系统</h2>
+      <p class="text-h5">停车场管理系统</p>
     </v-col>
 
     <v-col cols="auto" class="d-flex align-center text-subtitle-2">

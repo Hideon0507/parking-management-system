@@ -1,5 +1,13 @@
 <template>
-  <v-btn color="teal-lighten-1" class="pr-5 pl-5" size="small" @click="handleClick"> 入 库 </v-btn>
+  <v-btn
+    color="teal-lighten-1"
+    class="pr-5 pl-5"
+    size="small"
+    :disabled="parkingStore.isFilled"
+    @click="handleClick"
+  >
+    入 库
+  </v-btn>
 </template>
 
 <script setup lang="ts">
@@ -18,7 +26,7 @@ const handleClick = () => {
   const car = {
     licensePlate: `${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
     timeIn: new Date(),
-    duration:"",
+    duration: "",
   };
 
   if (props.zoneName && props.spotIndex !== null) {

@@ -19,7 +19,7 @@
 
       <div
         v-else
-        class="text-grey-darken-1 text-subtitle-1 d-flex align-center"
+        class="text-grey-darken-1 text-subtitle-2 d-flex align-center"
       >
         <span>已出库</span>
         <v-icon class="car-icon pl-2" color="text-grey-darken-1"

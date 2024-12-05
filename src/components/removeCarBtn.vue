@@ -1,5 +1,13 @@
 <template>
-  <v-btn color="cyan-darken-1" class="pr-5 pl-5" size="small" @click="handleClick"> 出 库 </v-btn>
+  <v-btn
+    color="cyan-darken-1"
+    class="pr-5 pl-5"
+    size="small"
+    :disabled="parkingStore.isEmpty"
+    @click="handleClick"
+  >
+    出 库
+  </v-btn>
 </template>
 
 <script setup lang="ts">

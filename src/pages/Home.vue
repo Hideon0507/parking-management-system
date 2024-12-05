@@ -29,8 +29,9 @@ import Alert from "../components/Alert.vue"
 </script>
 
 <style scoped>
+
 .sidebar {
-  height: 100vh;
+  height: 120vh;
   overflow-y: auto;
 }
 .sidebar::-webkit-scrollbar {

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { onMounted, onUnmounted, reactive, ref } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 
 export interface Car {
   licensePlate: string;
@@ -47,6 +47,30 @@ export const useParkingStore = defineStore("parkingStore", () => {
       };
     })
   );
+
+  const generateLicensePlate = (): string => {
+    const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const numbers = "0123456789";
+
+    const first = letters.charAt(Math.floor(Math.random() * letters.length));
+    let rest = "";
+
+    if (Math.random() > 0.5) { // A12345
+      rest = Array.from({ length: 5 })
+        .map(() => numbers.charAt(Math.floor(Math.random() * numbers.length)))
+        .join("");
+    } else { // AB1234
+      const randomLetter = letters.charAt(
+        Math.floor(Math.random() * letters.length)
+      );
+      const randomNumbers = Array.from({ length: 4 })
+        .map(() => numbers.charAt(Math.floor(Math.random() * numbers.length)))
+        .join("");
+      rest = `${randomLetter}${randomNumbers}`;
+    }
+
+    return `${first}${rest}`;
+  };
 
   const parkingHistory = ref<Array<ParkingHistory>>([]);
 
@@ -111,7 +135,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
 
     setTimeout(() => {
       showAlert.value = false;
-    }, 3000); 
+    }, 3000);
   };
 
   const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
@@ -124,7 +148,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.carInfo = car;
         zone.free -= 1;
         addEntry(car, spot.spotNumber);
-        showTemporaryAlert(`车辆 ${car.licensePlate} 已入库`, "success")
+        showTemporaryAlert(`车辆 ${car.licensePlate} 已入库`, "success");
       }
     } else {
       // 随机排序 zones 和 spots 并选取第一个空车位
@@ -138,7 +162,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
           return;
         }
       }
-      showTemporaryAlert("无空闲车位！", "warning")
     }
   };
 
@@ -157,20 +180,21 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.carInfo = undefined;
         zone.free += 1;
         updateExit(carInfo.licensePlate, timeOut);
-        showTemporaryAlert(`车辆 ${carInfo.licensePlate} 已出库！`, "success")
+        console.log("carremoved");
+        showTemporaryAlert(`车辆 ${carInfo.licensePlate} 已出库！`, "success");
       }
     } else {
       const shuffledZones = [...zones].sort(() => Math.random() - 0.5);
       for (const zone of shuffledZones) {
         const shuffledSpots = [...zone.spots].sort(() => Math.random() - 0.5);
         const spot = shuffledSpots.find((spot) => spot.isOccupied);
+        console.log("shuffledSpots", spot?.spotNumber);
         if (spot) {
           const spotIndex = zone.spots.indexOf(spot);
           removeCar(zone.name, spotIndex);
           return;
         }
       }
-      showTemporaryAlert("没有车辆可出库！", "warning")
     }
   };
 
@@ -197,6 +221,38 @@ export const useParkingStore = defineStore("parkingStore", () => {
     searchResults.value = results;
   };
 
+  const isFilled = computed(() => zones.every((zone) => zone.free === 0));
+  const isEmpty = computed(() =>
+    zones.every((zone) => zone.free === zone.total)
+  );
+
+  const fillAllSpots = () => {
+    zones.forEach((zone) => {
+      zone.spots.forEach((spot, index)  => {
+        if (!spot.isOccupied) {
+          const car = {
+            licensePlate: generateLicensePlate(),
+            timeIn: new Date(),
+            duration: "",
+          };
+          addCar(car, zone.name, index);
+        }
+      });
+      zone.free = 0;
+    });
+  };
+
+  const clearAllSpots = () => {
+    zones.forEach((zone) => {
+      zone.spots.forEach((spot, index)=> {
+        if (spot.isOccupied) {
+          removeCar(zone.name, index);
+        }
+      });
+      zone.free = zone.total;
+    });
+  };
+
   return {
     zones,
     parkingHistory,
@@ -208,5 +264,9 @@ export const useParkingStore = defineStore("parkingStore", () => {
     addCar,
     removeCar,
     searchByLicensePlate,
+    fillAllSpots,
+    clearAllSpots,
+    isFilled,
+    isEmpty,
   };
 });
