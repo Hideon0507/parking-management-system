@@ -27,16 +27,23 @@ export interface ParkingHistory {
 }
 
 export const useParkingStore = defineStore("parkingStore", () => {
+  const TOTAL_SPOTS = 300;
+  const MAX_SPOTS_PER_ZONE = 24;
+  const totalZones = Math.ceil(TOTAL_SPOTS / MAX_SPOTS_PER_ZONE);
+
   const zones = reactive(
-    Array.from({ length: 13 }, (_, zoneIndex): Zone => {
-      const isLastZone = zoneIndex === 12;
+    Array.from({ length: totalZones }, (_, zoneIndex): Zone => {
+      const isLastZone = zoneIndex === totalZones - 1;
       const zoneName = String.fromCharCode(65 + zoneIndex);
+      const spotsInZone = isLastZone
+        ? TOTAL_SPOTS % MAX_SPOTS_PER_ZONE || MAX_SPOTS_PER_ZONE
+        : MAX_SPOTS_PER_ZONE;
       return {
         name: zoneName,
-        total: isLastZone ? 12 : 24,
-        free: isLastZone ? 12 : 24,
+        total: spotsInZone,
+        free: spotsInZone,
         spots: Array.from(
-          { length: isLastZone ? 12 : 24 },
+          { length: spotsInZone },
           (_, spotIndex): Spot => ({
             spotNumber: `${zoneName}-${(spotIndex + 1)
               .toString()
@@ -142,7 +149,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
       duration: "",
     };
     return car;
-  }
+  };
 
   const addCar = (zoneName?: string, spotIndex?: number) => {
     if (zoneName !== undefined && spotIndex !== undefined) {
@@ -233,7 +240,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
 
   const fillAllSpots = () => {
     zones.forEach((zone) => {
-      zone.spots.forEach((spot, index)  => {
+      zone.spots.forEach((spot, index) => {
         if (!spot.isOccupied) {
           addCar(zone.name, index);
         }
@@ -244,7 +251,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
 
   const clearAllSpots = () => {
     zones.forEach((zone) => {
-      zone.spots.forEach((spot, index)=> {
+      zone.spots.forEach((spot, index) => {
         if (spot.isOccupied) {
           removeCar(zone.name, index);
         }

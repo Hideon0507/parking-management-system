@@ -16,8 +16,8 @@
           </div>
           <v-icon color="greyDark" size="35">mdi-car</v-icon>
         </div>
-        <div v-else>
-          <p class="text-greyDark text-subtitle-2">空闲车位</p>
+        <div v-else class="d-flex align-center pt-4">
+          <p class="text-greyDark text-subtitle-2 ">空闲车位</p>
         </div>
       </v-card-text>
 
@@ -63,7 +63,7 @@ const dialogStore = useDialogStore();
 
 <style scoped>
 .parking-spot {
-  min-height: 10vh;
+  min-height: 50px;
 }
 .parking-card {
   background-color: white;
