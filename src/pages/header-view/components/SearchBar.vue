@@ -31,7 +31,7 @@
   </div>
   <p
     v-if="searchQuery && !searchResults.length"
-    class="text-grey-darken-1 text-subtitle-2 no-result"
+    class="text-greyDark text-subtitle-2 no-result"
   >
     未查询到匹配的车牌号
   </p>

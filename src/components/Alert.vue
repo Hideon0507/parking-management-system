@@ -1,14 +1,14 @@
 <template>
-  <div  class="d-flex justify-center">
+  <div class="d-flex justify-center">
     <v-alert
       v-if="parkingStore.showAlert"
       dismissible
       @click:close="parkingStore.showAlert = false"
-      class=" mb-6 alert text-body-2"
-      :type="parkingStore.alertType"
+      class="mb-6 alert text-body-1"
+      type="success"
       variant="outlined"
       border="bottom"
-      :border-color="parkingStore.alertType"
+      border-color="success"
       closable
     >
       {{ parkingStore.alertMessage }}

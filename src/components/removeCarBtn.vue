@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="cyan-darken-1"
+    color="cyan"
     class="pr-5 pl-5"
     size="small"
     :disabled="parkingStore.isEmpty"

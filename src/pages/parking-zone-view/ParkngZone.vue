@@ -2,7 +2,13 @@
   <v-container>
     <v-row class="align-center justify-space-between">
       <v-col cols="auto">
-        <v-btn @click="goBack" color="blue-grey-lighten-2" class="ml-3 pr-4 pl-4" >返回</v-btn>
+        <v-btn
+          @click="goBack"
+          color="blue-grey-lighten-2"
+          class="ml-3 pr-4 pl-4"
+        >
+          返回
+        </v-btn>
       </v-col>
       <v-col class="text-center">
         <h3>{{ zoneName }}区停车位</h3>
@@ -10,9 +16,11 @@
       <v-col
         cols="auto"
         v-if="zone"
-        :class="{ 'text-green-darken-1': zone.free > 0, 'text-red': zone.free === 0 }"
+        :class="{ 'text-green': zone.free > 0, 'text-red': zone.free === 0 }"
       >
-        <span class="pr-5 text-subtitle-2">空闲车位：{{ zone.free }} / {{ zone.total }}</span>
+        <span class="pr-5 text-subtitle-2">
+          空闲车位：{{ zone.free }} / {{ zone.total }}
+        </span>
       </v-col>
     </v-row>
 

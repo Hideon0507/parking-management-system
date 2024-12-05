@@ -11,7 +11,7 @@
     <v-col cols="auto" class="d-flex align-center text-subtitle-2">
       <div class="mr-2">
         <span>空闲车位/全部车位 : </span>
-        <span class="text-green-darken-1">{{ freeSpots }} </span>
+        <span class="text-green">{{ freeSpots }} </span>
         <span> / {{ totalSpots }}</span>
       </div>
 

@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="teal-lighten-1"
+    color="teal"
     class="pr-5 pl-5"
     size="small"
     :disabled="parkingStore.isFilled"
@@ -21,18 +21,11 @@ interface IProps {
 const props = defineProps<IProps>();
 
 const parkingStore = useParkingStore();
-
 const handleClick = () => {
-  const car = {
-    licensePlate: `${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-    timeIn: new Date(),
-    duration: "",
-  };
-
   if (props.zoneName && props.spotIndex !== null) {
-    parkingStore.addCar(car, props.zoneName, props.spotIndex);
+    parkingStore.addCar(props.zoneName, props.spotIndex);
   } else {
-    parkingStore.addCar(car);
+    parkingStore.addCar();
   }
 };
 </script>

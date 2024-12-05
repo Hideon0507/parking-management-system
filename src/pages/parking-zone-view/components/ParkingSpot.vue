@@ -1,19 +1,20 @@
 <template>
   <div class="mr-6">
-    <v-card
-      class="parking-card"
-      variant="outlined"
-      color="bg-blue-grey-lighten-3"
-    >
+    <v-card class="parking-card" variant="outlined" color="bg-greyLight">
       <v-card-text class="parking-spot">
         <div v-if="spot.isOccupied">
-          <div class="d-flex cursor-pointer pl-4" @click="dialogStore.openDialog(log)">
+          <div
+            class="d-flex cursor-pointer pl-4"
+            @click="dialogStore.openDialog(log)"
+          >
             <span class="text-body-1 text-grey-darken-2 font-weight-bold pb-1">
               {{ spot.carInfo?.licensePlate }}
             </span>
-            <v-icon color="blue-grey-lighten-1" size="15">mdi-information-outline</v-icon>
+            <v-icon color="blue-grey-lighten-1" size="15"
+              >mdi-information-outline</v-icon
+            >
           </div>
-          <v-icon color="greyDark" size="35" >mdi-car</v-icon>
+          <v-icon color="greyDark" size="35">mdi-car</v-icon>
         </div>
         <div v-else>
           <p class="text-greyDark text-subtitle-2">空闲车位</p>
@@ -57,7 +58,7 @@ const log = computed(() => {
   };
 });
 
-const dialogStore = useDialogStore(); 
+const dialogStore = useDialogStore();
 </script>
 
 <style scoped>

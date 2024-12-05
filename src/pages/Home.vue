@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="">
+    <v-row>
       <v-col cols="9" class="bg-grey-lighten-3">
         <router-view />
       </v-col>

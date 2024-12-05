@@ -1,7 +1,12 @@
 <template>
-  <v-container class="sidebar-container">
+  <v-container>
     <p class="d-flex justify-center mb-5 text-h6">车辆出入库历史记录</p>
-    <div v-if="paginatedLogs.length === 0" class="d-flex justify-center align-center mt-15 text-grey-darken-1 text-subtitle-2" >当前无车辆出入库记录</div>
+    <div
+      v-if="paginatedLogs.length === 0"
+      class="d-flex justify-center align-center mt-10 text-greyDark text-subtitle-2"
+    >
+      当前无车辆出入库记录
+    </div>
     <div v-for="(log, index) in paginatedLogs" :key="index">
       <v-card class="mt-2 pl-2">
         <v-card-text class="text-body-2">
@@ -24,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { useParkingStore } from "../../stores/parkingStore.ts";
 import { computed, ref } from "vue";
 import ParkingDetails from "../../components/ParkingDetails.vue";
+import { useParkingStore } from "../../stores/parkingStore.ts";
 
 const parkingStore = useParkingStore();
 
@@ -36,7 +41,7 @@ const totalPages = computed(() => {
   return Math.ceil(parkingStore.parkingHistory.length / itemsPerPage);
 });
 
-const paginatedLogs = computed(() => {
+const paginatedLogs = computed(() => { // 每页15个记录
   const start = (page.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   return parkingStore.parkingHistory.slice(start, end);

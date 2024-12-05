@@ -6,7 +6,7 @@
           icon
           @click="dialogStore.closeDialog"
           size="x-small"
-          color="grey-darken-1"
+          color="greyDark"
           style="opacity: 0.5"
         >
           <v-icon size="20">mdi-close</v-icon>

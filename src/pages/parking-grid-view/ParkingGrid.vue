@@ -1,9 +1,10 @@
 <template>
-  <v-container class="parking-grid">
+  <v-container>
     <v-row class="justify-space-between ml-10 mr-4">
       <v-col cols="3" v-for="(zone, index) in zones" :key="index">
         <v-card
-          class="parking-zone ma-3 pt-5 pb-5"
+          class="ma-3 pt-5 pb-5"
+          align="center"
           outlined
           hover
           @click="navigateToZone(zone.name)"
@@ -12,7 +13,7 @@
           <v-card-subtitle>
             <div
               :class="{
-                'text-green-darken-1': zone.free > 0,
+                'text-green': zone.free > 0,
                 'text-red': zone.free === 0,
               }"
             >
@@ -26,16 +27,16 @@
       </v-col>
     </v-row>
 
-    <v-row class="ml-15  mt-5">
+    <v-row class="ml-15 mt-5">
       <v-btn
-        color="teal-lighten-1"
+        color="teal"
         :disabled="parkingStore.isFilled"
         @click="parkingStore.fillAllSpots"
       >
         一键入库
       </v-btn>
       <v-btn
-        color="cyan-darken-1"
+        color="cyan"
         class="ml-4"
         :disabled="parkingStore.isEmpty"
         @click="parkingStore.clearAllSpots"
@@ -59,13 +60,3 @@ const navigateToZone = (zoneName: string) => {
   router.push(`/zone/${zoneName}`);
 };
 </script>
-
-<style scoped>
-.parking-grid {
-  --background-color: #d8f4f8;
-}
-
-.parking-zone {
-  text-align: center;
-}
-</style>

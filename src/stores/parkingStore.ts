@@ -87,8 +87,8 @@ export const useParkingStore = defineStore("parkingStore", () => {
   let durationInterval: number | undefined;
 
   onMounted(() => {
-    updateDurations(); // 立即更新
-    durationInterval = setInterval(updateDurations, 60000); // 每分钟更新
+    updateDurations();
+    durationInterval = setInterval(updateDurations, 60000); // 每分钟刷新
   });
 
   onUnmounted(() => {
@@ -126,29 +126,36 @@ export const useParkingStore = defineStore("parkingStore", () => {
 
   const alertMessage = ref("");
   const showAlert = ref(false);
-  const alertType = ref("");
 
-  const showTemporaryAlert = (message: string, type: string) => {
+  const showTemporaryAlert = (message: string) => {
     alertMessage.value = message;
     showAlert.value = true;
-    alertType.value = type;
-
     setTimeout(() => {
       showAlert.value = false;
     }, 3000);
   };
 
-  const addCar = (car: Car, zoneName?: string, spotIndex?: number) => {
+  const createCar = (): Car => {
+    const car = {
+      licensePlate: generateLicensePlate(),
+      timeIn: new Date(),
+      duration: "",
+    };
+    return car;
+  }
+
+  const addCar = (zoneName?: string, spotIndex?: number) => {
     if (zoneName !== undefined && spotIndex !== undefined) {
       const zone = zones.find((z) => z.name === zoneName);
       if (!zone) return;
       const spot = zone.spots[spotIndex];
       if (!spot.isOccupied) {
         spot.isOccupied = true;
+        const car = createCar();
         spot.carInfo = car;
         zone.free -= 1;
         addEntry(car, spot.spotNumber);
-        showTemporaryAlert(`车辆 ${car.licensePlate} 已入库`, "success");
+        showTemporaryAlert(`车辆 ${car.licensePlate} 已入库`);
       }
     } else {
       // 随机排序 zones 和 spots 并选取第一个空车位
@@ -158,7 +165,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
         const spot = shuffledSpots.find((spot) => !spot.isOccupied);
         if (spot) {
           const spotIndex = zone.spots.indexOf(spot);
-          addCar(car, zone.name, spotIndex);
+          addCar(zone.name, spotIndex);
           return;
         }
       }
@@ -180,15 +187,13 @@ export const useParkingStore = defineStore("parkingStore", () => {
         spot.carInfo = undefined;
         zone.free += 1;
         updateExit(carInfo.licensePlate, timeOut);
-        console.log("carremoved");
-        showTemporaryAlert(`车辆 ${carInfo.licensePlate} 已出库！`, "success");
+        showTemporaryAlert(`车辆 ${carInfo.licensePlate} 已出库！`);
       }
     } else {
       const shuffledZones = [...zones].sort(() => Math.random() - 0.5);
       for (const zone of shuffledZones) {
         const shuffledSpots = [...zone.spots].sort(() => Math.random() - 0.5);
         const spot = shuffledSpots.find((spot) => spot.isOccupied);
-        console.log("shuffledSpots", spot?.spotNumber);
         if (spot) {
           const spotIndex = zone.spots.indexOf(spot);
           removeCar(zone.name, spotIndex);
@@ -230,12 +235,7 @@ export const useParkingStore = defineStore("parkingStore", () => {
     zones.forEach((zone) => {
       zone.spots.forEach((spot, index)  => {
         if (!spot.isOccupied) {
-          const car = {
-            licensePlate: generateLicensePlate(),
-            timeIn: new Date(),
-            duration: "",
-          };
-          addCar(car, zone.name, index);
+          addCar(zone.name, index);
         }
       });
       zone.free = 0;
@@ -259,7 +259,6 @@ export const useParkingStore = defineStore("parkingStore", () => {
     searchResults,
     alertMessage,
     showAlert,
-    alertType,
     formatTime,
     addCar,
     removeCar,

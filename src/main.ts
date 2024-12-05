@@ -1,34 +1,26 @@
+import "@mdi/font/css/materialdesignicons.css";
+import { createPinia } from "pinia";
 import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
 import { createVuetify } from "vuetify";
 import "vuetify/styles";
-import "@mdi/font/css/materialdesignicons.css";
-import router from "./router/router";
 import colors from "vuetify/util/colors";
-import { createPinia } from "pinia";
+import App from "./App.vue";
+import router from "./router/router";
+import "./style.css";
 
-// createApp(App).mount('#app')
 const vuetify = createVuetify({
   theme: {
     defaultTheme: "light",
     themes: {
       light: {
         colors: {
-          blueLight: colors.blue.lighten5,
-          greyLight: colors.grey.lighten1,
+          teal: colors.teal.lighten1,
           greyDark: colors.grey.darken1,
-          green: colors.green.lighten1,
-          red: colors.red.darken1,
-          blue: colors.blue.lighten1,
-          blueGrey: colors.blueGrey.lighten2,
-          primary: "#4caf50",
-          secondary: "#2196f3",
-          error: "#f44336",
-          warning: "#ff9800",
-          info: "#00bcd4",
-          success: "#8bc34a",
-          background: "#f5f5f5",
+          orange: colors.orange.lighten1,
+          cyan: colors.cyan.darken1,
+          green: colors.green.darken1,
+          greyLight: colors.grey.lighten3,
+         red: colors.red.darken1,         
         },
       },
     },

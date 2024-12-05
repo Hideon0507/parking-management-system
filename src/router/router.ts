@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ParkingGrid from '../pages/parking-grid-view/ParkingGrid.vue'
-import ParkingZone from '../pages/parking-zone-view/ParkngZone.vue'
+import ParkingGrid from '../pages/parking-grid-view/ParkingGrid.vue';
+import ParkingZone from '../pages/parking-zone-view/ParkngZone.vue';
 
 const routes = [
   {
